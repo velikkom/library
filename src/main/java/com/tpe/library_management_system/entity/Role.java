@@ -29,7 +29,8 @@ public class Role
     private RoleType roleType;
 
     @OneToMany(mappedBy = "role")
-    private Set<UserRole> userRoles = new HashSet<>();
+    private Role userRoles;
 
+    String roleName;
 
 }

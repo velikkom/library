@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,14 +18,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Data
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Table(name = "users")
-public class User {
+public class  User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+   /* @Column(unique = true)
+    private String username;*/
 
     @NotNull
     @Size(min = 2, max = 30)
@@ -43,19 +48,22 @@ public class User {
     private String address;
 
     @NotNull
+    @Column(unique = true)
     @Pattern(regexp = "\\d{3} \\d{3} \\d{4}")
     private String phone;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy MM dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
 
     @NotNull
     @Email
+    @Column(unique = true)
     @Size(min = 10, max = 80)
     private String email;
 
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     private String password; // Bu alan şifrelenmiş (hashed) olmalıdır
 
     @NotNull
@@ -77,7 +85,7 @@ public class User {
             joinColumns =  @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> userRoles;
+    private Role userRoles;
 
 
 
